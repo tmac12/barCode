@@ -1,0 +1,156 @@
+.barcode-scanner-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.debug-section {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.debug-section summary {
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.debug-section pre {
+  margin: 10px 0 0 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.scanner-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.scan-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.scan-button:hover {
+  background-color: #45a049;
+}
+
+.video-container {
+  position: relative;
+  display: inline-block;
+}
+
+video {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: #000;
+}
+
+.stop-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.stop-button:hover {
+  background-color: #da190b;
+}
+
+.result-section {
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result-section.success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.result-section.error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.result-section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.barcode-value {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+  word-break: break-all;
+  border: 1px solid #dee2e6;
+}
+
+.clear-button {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.clear-button:hover {
+  background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+  .barcode-scanner-container {
+    padding: 10px;
+  }
+  
+  video {
+    max-width: 100%;
+  }
+  
+  .scan-button {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
