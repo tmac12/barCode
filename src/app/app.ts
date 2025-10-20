@@ -1,4 +1,4 @@
-import { Component, signal, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, signal, ElementRef, ViewChild, OnInit, afterNextRender, Injector } from '@angular/core';
 import { BarcodeDetector } from 'barcode-detector/ponyfill';
 import { CommonModule } from '@angular/common';
 
@@ -15,12 +15,15 @@ export class App implements OnInit {
   protected readonly error = signal<string>('');
   protected readonly debugInfo = signal<string>('');
 
-  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('video', { static: false }) videoElement?: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas', { static: false }) canvasElement?: ElementRef<HTMLCanvasElement>;
 
   private stream: MediaStream | null = null;
   private barcodeDetector: BarcodeDetector | null = null;
   private animationId: number | null = null;
+  private pendingStream: MediaStream | null = null;
+
+  constructor(private injector: Injector) {}
 
   ngOnInit() {
     this.checkEnvironment();
@@ -78,26 +81,21 @@ export class App implements OnInit {
 
       console.log('Camera constraints:', constraints);
 
-      this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-      console.log('Camera access granted!', this.stream);
+      console.log('Camera access granted!', stream);
 
-      // Set scanning to true to render the video element
+      // Store stream and trigger view rendering with signal
+      this.pendingStream = stream;
       this.isScanning.set(true);
 
-      // Wait for the next change detection cycle to ensure video element is rendered
-      await new Promise(resolve => setTimeout(resolve, 0));
-
-      // Set up video stream
-      const video = this.videoElement.nativeElement;
-      video.srcObject = this.stream;
-      video.play();
-
-      // Start scanning when video is ready
-      video.addEventListener('loadedmetadata', () => {
-        console.log('Video loaded, starting barcode detection');
-        this.scanForBarcodes();
-      });
+      // Use afterNextRender to initialize video after DOM update
+      afterNextRender(() => {
+        if (this.pendingStream && this.videoElement) {
+          this.initializeVideoStream(this.pendingStream);
+          this.pendingStream = null;
+        }
+      }, { injector: this.injector });
     } catch (err: any) {
       console.error('Error accessing camera:', err);
 
@@ -122,8 +120,23 @@ export class App implements OnInit {
     }
   }
 
+  private initializeVideoStream(stream: MediaStream) {
+    if (!this.videoElement) return;
+
+    this.stream = stream;
+    const video = this.videoElement.nativeElement;
+    video.srcObject = stream;
+    video.play();
+
+    // Start scanning when video is ready
+    video.addEventListener('loadedmetadata', () => {
+      console.log('Video loaded, starting barcode detection');
+      this.scanForBarcodes();
+    });
+  }
+
   private scanForBarcodes() {
-    if (!this.isScanning() || !this.barcodeDetector) return;
+    if (!this.isScanning() || !this.barcodeDetector || !this.videoElement || !this.canvasElement) return;
 
     const video = this.videoElement.nativeElement;
     const canvas = this.canvasElement.nativeElement;
