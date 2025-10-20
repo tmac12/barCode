@@ -1,5 +1,23 @@
 # BarCode
 
+A real-time barcode scanner web application built with Angular 20.2 that uses your device's camera to detect and read barcodes.
+
+## Live Demo
+
+🔗 **[https://tmac12.github.io/barCode/](https://tmac12.github.io/barCode/)**
+
+> **Note:** Camera access requires HTTPS or localhost. The GitHub Pages deployment uses HTTPS, so the camera will work properly.
+
+## Features
+
+- Real-time barcode scanning using device camera
+- Support for multiple barcode formats via Barcode Detector API
+- Responsive design with video preview
+- Error handling for camera permissions and browser compatibility
+- Built with Angular 20.2 using zoneless change detection and signals
+
+---
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
 
 ## Development server
